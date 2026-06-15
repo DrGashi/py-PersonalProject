@@ -20,8 +20,6 @@ def delete_mechanic(mid):
 
 def get_cars():
     response = requests.get(f"{BASE_URL}/cars/")
-    st.write("Status:", response.status_code)
-    st.write("Response:", response.text)
     return response.json()
 
 def add_car(data):
