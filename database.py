@@ -37,11 +37,13 @@ def insert_mechanics(mechanics, cursor):
 
     for mechanic in mechanics:
         cursor.execute('''
-            INSERT OR IGNORE INTO mechanic (name)
+            INSERT OR IGNORE INTO mechanics (name)
             VALUES (?)
         ''', (mechanic,))
         cursor.execute('SELECT id FROM mechanics WHERE name = ?', (mechanic,))
-        mechanic_ids[mechanic] = cursor.fetchone()[0]
+        row = cursor.fetchone()
+        if row:
+            mechanic_ids[mechanic] = row[0]
 
     return mechanic_ids
 
@@ -49,7 +51,7 @@ def insert_mechanics(mechanics, cursor):
 def insert_cars(car_dict, mechanic_ids, cursor):
     for (make, mechanic), info in car_dict.items():
         cursor.execute('''
-            INSERT INTO car (make, model, year, issue, mechanic_id)
+            INSERT INTO cars (make, model, year, issue, mechanic_id)
             VALUES (?, ?, ?, ?, ?)
         ''', (
             make,

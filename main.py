@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from routers import mechanics, cars
+from routers import mechanics
+from routers import cars
 from database import create_database
 
 app = FastAPI(

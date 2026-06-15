@@ -37,10 +37,10 @@ def create_mechanic(mechanic: MechanicCreate):
 
 
 @router.put("/{mechanic_id}", response_model=Mechanic)
-def update_author(mechanic_id: int,mechanic: MechanicCreate):
+def update_mechanic(mechanic_id: int,mechanic: MechanicCreate):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE mechanics SET name = ? WHERE id = ?", (mechanic.name, author_id))
+    cursor.execute("UPDATE mechanics SET name = ? WHERE id = ?", (mechanic.name, mechanic_id))
     if cursor.rowcount == 0:
         conn.close()
         raise HTTPException(status_code=404, detail="Mechanic not found")
