@@ -35,10 +35,19 @@ def delete_car(cid):
     requests.delete(f"{BASE_URL}/cars/{cid}")
 
 def mechanics_dashboard():
-    st.title("Mechanics")
+    st.title("🔧 Mechanics")
     mechanics = get_mechanics()
-    if mechanics:
-        st.dataframe(pd.DataFrame(mechanics), use_container_width=True)
+
+    display = []
+
+    for mechanic in mechanics:
+        display.append({
+            "name": mechanic["name"],
+            "id": str(mechanic["id"])
+        })
+
+    if display:
+        st.dataframe(pd.DataFrame(display), use_container_width=True)
 
     st.subheader("Add Mechanic")
 
@@ -49,12 +58,12 @@ def mechanics_dashboard():
             add_mechanic(name)
             st.rerun()
 
-    action = st.radio("What would you like to do?", options=["Update Mechanic", "Delete Mechanic"])
+    action = st.radio("What would you like to do?", options=["✏️ Update Mechanic", "❌ Delete Mechanic"])
 
-    if action == "Update Mechanic":
+    if action == "✏️ Update Mechanic":
         st.subheader("Update Mechanic")
 
-        selected_mechanic = st.selectbox("Choose mechanic", mechanics, format_func=lambda x: f"{x['name']}")
+        selected_mechanic = st.selectbox("Choose mechanic", mechanics, format_func=lambda x: x['name'])
 
         new_name = st.text_input("New Name", selected_mechanic["name"])
 
@@ -67,7 +76,7 @@ def mechanics_dashboard():
                 update_mechanic(selected_mechanic["id"], mechanic_data)
                 st.rerun()
 
-    elif action == "Delete Mechanic":
+    elif action == "❌ Delete Mechanic":
         st.subheader("Delete Mechanic")
 
         if mechanics:
@@ -77,7 +86,7 @@ def mechanics_dashboard():
                 st.rerun()
 
 def cars_dashboard():
-    st.title("Cars")
+    st.title("🚗 Cars")
 
     cars = get_cars()
     mechanics = get_mechanics()
@@ -91,10 +100,10 @@ def cars_dashboard():
 
     for car in cars:
         display.append({
-            "ID": car["id"],
+            "ID": str(car["id"]),
             "Make": car["make"],
             "Model": car["model"],
-            "Year": car["year"],
+            "Year": str(car["year"]),
             "Issue": car["issue"],
             "Mechanic": mechanic_map.get(car["mechanic_id"])
         })
@@ -124,9 +133,9 @@ def cars_dashboard():
         add_car(car_data)
         st.rerun()
 
-    action = st.radio("What would you like to do?", options=["Update Car", "Delete Car"], key="radio_action")
+    action = st.radio("What would you like to do?", options=["✏️ Update Car", "❌ Delete Car"], key="radio_action")
 
-    if action == "Update Car":
+    if action == "✏️ Update Car":
         st.subheader("Update Car")
 
         selected_car = st.selectbox("Choose Car", cars, format_func=lambda x: f"{x['year']} {x['make']} {x['model']}")
@@ -151,18 +160,18 @@ def cars_dashboard():
                 update_car(selected_car["id"], car_data)
                 st.rerun()
 
-    elif action == "Delete Car":
+    elif action == "❌ Delete Car":
         st.subheader("Delete Car")
 
         if cars:
 
-            selected_car = st.selectbox("Choose Car", cars, format_func=lambda x: f"{x['make']} {x['model']}")
+            selected_car = st.selectbox("Choose Car", cars, format_func=lambda x: f"{x ['year']} {x['make']} {x['model']}")
 
             if st.button("Delete Car"):
                 delete_car(selected_car["id"])
                 st.rerun()
 
-st.sidebar.title("Navigation")
+st.sidebar.title("🧭 Navigation")
 
 page = st.sidebar.selectbox("Select Page",["Mechanics","Cars"])
 
